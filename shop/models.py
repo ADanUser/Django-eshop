@@ -10,7 +10,7 @@ class Product(models.Model):
 
 
 class ProductImage(models.Model):
-    image_url = models.ImageField()
+    image = models.ImageField()
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
 

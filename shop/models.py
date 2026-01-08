@@ -6,7 +6,7 @@ class Product(models.Model):
     description = models.TextField()
     price = models.FloatField()
     stock = models.IntegerField()
-    attribute = models.ManyToManyField('Attribute')
+    attributes = models.ManyToManyField('Attribute')
 
 
 class ProductImage(models.Model):

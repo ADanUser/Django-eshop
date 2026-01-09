@@ -22,14 +22,29 @@ class Product(models.Model):
 
     objects = ProductManager()
 
+    class Meta:
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
+        indexes = [
+            models.Index(fields=['price']),
+        ]
+
 
 class ProductImage(models.Model):
     image = models.ImageField()
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
+    class Meta:
+        verbose_name = 'Изображение товара'
+        verbose_name_plural = 'Изображения товаров'
+
 
 class Attribute(models.Model):
     name = models.CharField(max_length=255)
+
+    class Meta:
+        verbose_name = 'Атрибут'
+        verbose_name_plural = 'Атрибуты'
 
 
 class Order(models.Model):

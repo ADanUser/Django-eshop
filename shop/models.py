@@ -14,13 +14,16 @@ class ProductManager(models.Manager):
 
 
 class Product(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    price = models.FloatField()
-    stock = models.IntegerField()
-    attributes = models.ManyToManyField('Attribute')
+    title = models.CharField(max_length=200, verbose_name='Название')
+    description = models.TextField(verbose_name='Описание')
+    price = models.FloatField(verbose_name='Цена')
+    stock = models.IntegerField(verbose_name='Количество на складе')
+    attributes = models.ManyToManyField('Attribute', verbose_name='Свойства')
 
     objects = ProductManager()
+
+    def __str__(self):
+        return f"{self.title}: #{self.id}"
 
     class Meta:
         verbose_name = 'Товар'
@@ -42,9 +45,12 @@ class ProductImage(models.Model):
 class Attribute(models.Model):
     name = models.CharField(max_length=255)
 
+    def __str__(self):
+        return self.name
+
     class Meta:
-        verbose_name = 'Атрибут'
-        verbose_name_plural = 'Атрибуты'
+        verbose_name = 'Свойство'
+        verbose_name_plural = 'Свойства'
 
 
 class Order(models.Model):

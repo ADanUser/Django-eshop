@@ -1,6 +1,6 @@
 from django.contrib.admin.filters import SimpleListFilter
 
-class StockFilter(SimpleListFilter):
+class ProductStockFilter(SimpleListFilter):
     title = 'Наличие на складе'
     parameter_name = 'stock_status'
 

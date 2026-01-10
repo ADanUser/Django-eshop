@@ -1,6 +1,6 @@
 from django.contrib import admin
 from shop.models import Product, ProductImage, Attribute
-from shop.filters import StockFilter
+from shop.filters import ProductStockFilter
 
 # @admin.action(description="Сбросить остатки до 0")
 # def reset_stock(model_admin, request, queryset):
@@ -10,7 +10,7 @@ from shop.filters import StockFilter
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'stock', 'images', 'get_attributes')
-    list_filter = (StockFilter,)
+    list_filter = (ProductStockFilter,)
     search_fields = ('title', 'description')
     actions = ("reset_stock",)    
 

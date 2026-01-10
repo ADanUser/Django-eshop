@@ -12,10 +12,10 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'stock', 'images', 'get_attributes')
     list_filter = (ProductStockFilter,)
     search_fields = ('title', 'description')
-    actions = ("reset_stock",)    
+    actions = ("set_zero_stock",)    
 
     @admin.action(description="Сбросить остатки до 0")
-    def reset_stock(self, request, queryset):
+    def set_zero_stock(self, request, queryset):
         updated_count = queryset.update(stock=0)
         self.message_user(request, f"Остатки сброшены у {updated_count} товаров.")
 

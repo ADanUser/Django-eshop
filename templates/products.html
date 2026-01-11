@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Список товаров</title>
+</head>
+<body>
+    <h1>Все продукты</h1>
+    <p>Текущее время: {{ current_time }}</p>
+
+    <ul>
+        {% for product in products %}
+            <li>
+                <h2>{{ product.title }}</h2>
+                <p>{{ product.description }}</p>
+                <p>Цена: {{ product.price }}</p>
+                <p>Остаток: {{ product.stock }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

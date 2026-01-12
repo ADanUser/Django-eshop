@@ -18,6 +18,7 @@ class Product(models.Model):
     description = models.TextField(verbose_name='Описание')
     price = models.FloatField(verbose_name='Цена')
     stock = models.IntegerField(verbose_name='Количество на складе')
+    image = models.ImageField(upload_to='products/', verbose_name='Изображение', null=True, blank=True)
     attributes = models.ManyToManyField('Attribute', verbose_name='Свойства')
 
     objects = ProductManager()

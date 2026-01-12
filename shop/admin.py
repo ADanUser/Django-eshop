@@ -37,8 +37,9 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display = ('image', 'product')
+    list_display = ('id', 'image', 'product')
 
+    
 @admin.register(Attribute)
 class AttributeAdmin(admin.ModelAdmin):
     list_display = ('name',)

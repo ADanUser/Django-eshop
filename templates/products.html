@@ -1,22 +1,30 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Список товаров</title>
-</head>
-<body>
-    <h1>Все продукты</h1>
-    <p>Текущее время: {{ current_time }}</p>
+{% extends "common.html" %} 
 
-    <ul>
+{% block styles %} 
+{% load static %}
+    <link rel="stylesheet" href="{% static 'products.css' %}" />
+{% endblock styles %} 
+
+{% block content %}
+<div class="container text-center mt-4">
+    <h1 class="mb-3">Все продукты</h1>
+    <p class="text-muted mb-5">Текущее время: {{ current_time }}</p>
+
+    <div class="d-flex flex-wrap gap-4 justify-content-center">
         {% for product in products %}
-            <li>
-                <h2>{{ product.title }}</h2>
-                <p>{{ product.description }}</p>
-                <p>Цена: {{ product.price }}</p>
-                <p>Остаток: {{ product.stock }}</p>
-            </li>
+        <div class="card" style="width: 18rem">
+            <img
+                src="{{ product.productimage_set.all.0.image.url }}"
+                class="card-img-top"
+                alt="..."
+            />
+            <div class="card-body text-start">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p class="card-text">{{ product.description }}</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}

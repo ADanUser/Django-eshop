@@ -1,24 +1,11 @@
-{% extends "common.html" %}
-
-{% block styles %}
-{% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'auth.css' %}" />
-{% endblock styles %}
-
-{% block content %}
+{% extends "common.html" %} {% block styles %} {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'auth.css' %}" />
+{% endblock styles %} {% block content %}
 <div class="form-container">
     <form method="POST" class="form">
-        {% csrf_token %}
-        <p class="title">Register</p>
-        <p class="message">Signup now and get full access to our app.</p>
-        {% for field in form %}
-        <label>
-            {{ field }}
-            <span>{{ field.label }}</span>
-        </label>
-        {{ field.errors }} {% endfor %}
+        {% csrf_token %} 
+        {{ form }}
         <button class="submit">Submit</button>
-        <p class="signin">Already have an acount ? <a href="#">Signin</a></p>
     </form>
 </div>
 {% endblock content %}

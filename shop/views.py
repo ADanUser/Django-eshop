@@ -1,10 +1,12 @@
 from datetime import datetime
 
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 
-from .forms import CustomUserCreationForm
-from .models import Product
+from shop.forms import CustomUserCreationForm, UserAuthForm
+from shop.models import Product
 
 
 def all_products(request: HttpRequest) -> HttpResponse:
@@ -29,3 +31,33 @@ def registration_view(request: HttpRequest) -> HttpResponse:
         "form": form,
     }
     return render(request, "registration.html", context)
+
+
+def login_page(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = UserAuthForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("all_products")
+            else:
+                messages.error(request, "Неверное имя пользователя или пароль.")
+        else:
+            for error_list in form.errors.values():
+                for error in error_list:
+                    messages.error(request, error)
+    
+    form = UserAuthForm()
+        
+    context = {
+        "form": form,
+    }
+    return render(request, "login.html", context)
+
+
+def logout_user(request: HttpRequest) -> HttpResponse:
+    logout(request)
+    return redirect("all_products")

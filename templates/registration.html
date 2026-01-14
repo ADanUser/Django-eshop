@@ -1,11 +1,15 @@
-{% extends "common.html" %} {% block styles %} {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'auth.css' %}" />
-{% endblock styles %} {% block content %}
-<div class="form-container">
-    <form method="POST" class="form">
-        {% csrf_token %} 
-        {{ form }}
-        <button type="submit" class="submit">Зарегестрироваться</button>
-    </form>
-</div>
+{% extends "common.html" %} 
+{% block styles %} 
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'auth.css' %}" />
+{% endblock styles %} 
+
+{% block content %}
+    <div class="form-container">
+        <form method="POST" class="form">
+            {% csrf_token %} 
+            {{ form }}
+            <button type="submit" class="submit">Зарегестрироваться</button>
+        </form>
+    </div>
 {% endblock content %}

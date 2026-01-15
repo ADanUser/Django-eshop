@@ -5,19 +5,32 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
+from django.views.generic import ListView
+
 
 
 from shop.forms import CustomUserCreationForm, UserAuthForm
 from shop.models import Product
 
+class AllProductsView(ListView):
+    model = Product
+    template_name = "products.html"
+    context_object_name = "products"
 
-def all_products(request: HttpRequest) -> HttpResponse:
-    products = Product.objects.all()
-    context = {
-        "products": products,
-        "current_time": datetime.now(),
-    }
-    return render(request, "products.html", context)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_time"] = datetime.now()
+        return context
+
+
+
+# def all_products(request: HttpRequest) -> HttpResponse:
+#     products = Product.objects.all()
+#     context = {
+#         "products": products,
+#         "current_time": datetime.now(),
+#     }
+#     return render(request, "products.html", context)
 
 
 class RegistrationView(View):

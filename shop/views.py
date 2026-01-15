@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 
@@ -132,3 +132,9 @@ class LoginView(View):
 def logout_user(request: HttpRequest) -> HttpResponse:
     logout(request)
     return redirect("all_products")
+
+
+class ProductDetailView(DetailView):
+    model = Product
+    template_name = "product_detail.html"
+    context_object_name = "product"

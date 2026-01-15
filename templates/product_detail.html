@@ -1,0 +1,28 @@
+{% extends "common.html" %} 
+
+{% block content %}
+<div class="container text-center mt-4">
+    <h1 class="mb-3">{{ product.title }}</h1>
+
+    <div class="d-flex flex-column align-items-center">
+        <div class="d-flex flex-wrap gap-3 justify-content-center mb-4">
+            {% for image in product.productimage_set.all %}
+                <div style="width: 300px; height: 300px; overflow: hidden; border-radius: 8px; border: 1px solid #ddd;">
+                    <img
+                        src="{{ image.image.url }}"
+                        class="w-100 h-100"
+                        style="object-fit: cover;"
+                        alt="{{ product.title }}"
+                    />
+                </div>           
+            {% endfor %}
+        </div>
+
+        <div class="text-center" style="max-width: 600px;">
+            <p class="fs-5">{{ product.description }}</p>
+            <h3 class="my-3">Цена: {{ product.price }}</h3>
+            <a href="#" class="btn btn-primary btn-lg mt-2">Добавить в корзину</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

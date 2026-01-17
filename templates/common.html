@@ -24,9 +24,9 @@
                 {% if user.is_authenticated %}
                     <form class="d-flex" method="GET" action="{% url 'logout' %}">                   
                         <button class="btn btn-outline-success" type="submit">Выйти</button>
-                {% else %}
-                        <a class="btn btn-outline-success" href="{% url "login" %}">Войти</a>
                     </form>
+                {% else %}
+                    <a class="btn btn-outline-success" href="{% url "login" %}">Войти</a>
                 {% endif %}
             </div>
         </div>

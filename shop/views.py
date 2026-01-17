@@ -1,27 +1,19 @@
-from datetime import datetime
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import ListView, DetailView
-
-
+from shop.mixins import IsAuthenticatedMixin
 
 from shop.forms import CustomUserCreationForm, UserAuthForm
 from shop.models import Product
 
-class AllProductsView(ListView):
+
+class AllProductsView(IsAuthenticatedMixin, ListView):
     model = Product
     template_name = "products.html"
     context_object_name = "products"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["current_time"] = datetime.now()
-        return context
-
 
 
 # def all_products(request: HttpRequest) -> HttpResponse:
@@ -134,7 +126,7 @@ def logout_user(request: HttpRequest) -> HttpResponse:
     return redirect("all_products")
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(IsAuthenticatedMixin, DetailView):
     model = Product
     template_name = "product_detail.html"
     context_object_name = "product"

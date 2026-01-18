@@ -10,9 +10,9 @@
 <script>
     window.addEventListener('load', function(){
         let toCartBtn = document.getElementById("add-to-cart");
-        const decrease = document.getElementById("decrement");
-        const increase = document.getElementById("increment");
-        const counter = document.getElementById("counter");
+        decrease = document.getElementById("decrease");
+        increase = document.getElementById("increase"); 
+        counter = document.getElementById("counter");
 
         function getCookie(name) {
             let cookieValue = null;
@@ -83,9 +83,9 @@
             <h3 class="my-3">Цена: {{ product.price }}</h3>
             <div class="d-flex flex-column align-items-center my-3">
                 <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
-                    <button id="decrement" class="qty-circle-btn" type="button">−</button>
+                    <button id="decrease" class="qty-circle-btn" type="button">−</button>
                     <b id="counter" class="fs-5 fw-semibold">1</b>
-                    <button id="increment" class="qty-circle-btn" type="button">+</button>
+                    <button id="increase" class="qty-circle-btn" type="button">+</button>
                 </div>
             </div>
             <a href="#" type="button" class="btn btn-primary btn-lg mt-2" id="add-to-cart">Добавить в корзину</a>

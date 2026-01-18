@@ -4,8 +4,11 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import ListView, DetailView
-from shop.mixins import IsAuthenticatedMixin
+from django.http.response import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 
+from shop.mixins import IsAuthenticatedMixin
 from shop.forms import CustomUserCreationForm, UserAuthForm
 from shop.models import Product
 
@@ -126,7 +129,16 @@ def logout_user(request: HttpRequest) -> HttpResponse:
     return redirect("all_products")
 
 
+@method_decorator(ensure_csrf_cookie, name="dispatch")
 class ProductDetailView(IsAuthenticatedMixin, DetailView):
     model = Product
     template_name = "product_detail.html"
     context_object_name = "product"
+
+
+class CartView(View):
+
+    @staticmethod
+    def post(request: HttpRequest) -> HttpResponse:
+        
+        return JsonResponse({ "success": True })

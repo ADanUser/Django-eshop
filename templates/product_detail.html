@@ -1,6 +1,76 @@
 {% extends "common.html" %} 
 
+{% block styles %} 
+{% load static %}
+    <link rel="stylesheet" href="{% static 'detail.css' %}" />
+{% endblock styles %} 
+
 {% block content %}
+
+<script>
+    window.addEventListener('load', function(){
+        let toCartBtn = document.getElementById("add-to-cart");
+        const decrementBtn = document.getElementById("decrement");
+        const incrementBtn = document.getElementById("increment");
+        const quantityElement = document.getElementById("quantity");
+        const minQuantity = 0;
+        const maxQuantity = {{ product.stock|default:0 }};
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        const initialQuantity = maxQuantity > 0 ? 1 : 0;
+        quantityElement.textContent = initialQuantity.toString();
+
+        decrementBtn.addEventListener("click", function() {
+            let currentValue = parseInt(quantityElement.textContent);
+            if (isNaN(currentValue) || currentValue <= minQuantity) {
+                quantityElement.textContent = minQuantity.toString();
+                return;
+            }
+            quantityElement.textContent = (currentValue - 1).toString();
+        });
+
+        incrementBtn.addEventListener("click", function() {
+            let currentValue = parseInt(quantityElement.textContent);
+            if (isNaN(currentValue) || currentValue < minQuantity) {
+                currentValue = minQuantity;
+            }
+            if (currentValue < maxQuantity) {
+                quantityElement.textContent = (currentValue + 1).toString();
+            }
+        });
+
+        toCartBtn.onclick = function (event) {
+            fetch(`{% url "cart" %}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    'productiId': 123
+                })
+            })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.log(error))
+        }
+    })
+</script>
 <div class="container text-center mt-4">
     <h1 class="mb-3">{{ product.title }}</h1>
 
@@ -21,7 +91,14 @@
         <div class="text-center" style="max-width: 600px;">
             <p class="fs-5">{{ product.description }}</p>
             <h3 class="my-3">Цена: {{ product.price }}</h3>
-            <a href="#" class="btn btn-primary btn-lg mt-2">Добавить в корзину</a>
+            <div class="d-flex flex-column align-items-center my-3">
+                <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
+                    <button class="qty-circle-btn" type="button" id="decrement">−</button>
+                    <span id="quantity" class="fs-5 fw-semibold">1</span>
+                    <button class="qty-circle-btn" type="button" id="increment">+</button>
+                </div>
+            </div>
+            <a href="#" type="button" class="btn btn-primary btn-lg mt-2" id="add-to-cart">Добавить в корзину</a>
         </div>
     </div>
 </div>

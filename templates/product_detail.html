@@ -10,11 +10,9 @@
 <script>
     window.addEventListener('load', function(){
         let toCartBtn = document.getElementById("add-to-cart");
-        const decrementBtn = document.getElementById("decrement");
-        const incrementBtn = document.getElementById("increment");
-        const quantityElement = document.getElementById("counter");
-        const minQuantity = 0;
-        const maxQuantity = {{ product.stock|default:0 }};
+        const decrease = document.getElementById("decrement");
+        const increase = document.getElementById("increment");
+        const counter = document.getElementById("counter");
 
         function getCookie(name) {
             let cookieValue = null;
@@ -32,28 +30,6 @@
         }
         const csrftoken = getCookie('csrftoken');
 
-        const initialQuantity = maxQuantity > 0 ? 1 : 0;
-        quantityElement.textContent = initialQuantity.toString();
-
-        decrementBtn.addEventListener("click", function() {
-            let currentValue = parseInt(quantityElement.textContent);
-            if (isNaN(currentValue) || currentValue <= minQuantity) {
-                quantityElement.textContent = minQuantity.toString();
-                return;
-            }
-            quantityElement.textContent = (currentValue - 1).toString();
-        });
-
-        incrementBtn.addEventListener("click", function() {
-            let currentValue = parseInt(quantityElement.textContent);
-            if (isNaN(currentValue) || currentValue < minQuantity) {
-                currentValue = minQuantity;
-            }
-            if (currentValue < maxQuantity) {
-                quantityElement.textContent = (currentValue + 1).toString();
-            }
-        });
-
         toCartBtn.onclick = function (event) {
             fetch(`{% url "cart" %}`, {
                 method: 'POST',
@@ -68,6 +44,20 @@
             .then(response => response.json())
             .then(data => console.log(data))
             .catch(error => console.log(error))
+        }
+
+        increase.onclick = function (event) {
+            let value = parseInt (counter. innerHTML);
+            if (isNaN (value)) value = 0;
+            if (value < {{ product.stock|default:0 }}) value++;
+            counter.innerHTML = value. toString();
+        }
+
+        decrease.onclick = function (event) {
+            let value = parseInt (counter.innerHTML);
+            if (isNaN (value)) value = 0;
+            if (value > 0) value--;
+            counter.innerHTML = value.toString();
         }
     })
 </script>
@@ -93,9 +83,9 @@
             <h3 class="my-3">Цена: {{ product.price }}</h3>
             <div class="d-flex flex-column align-items-center my-3">
                 <div class="d-flex align-items-center justify-content-center gap-3 mb-2">
-                    <button class="qty-circle-btn" type="button" id="decrement">−</button>
+                    <button id="decrement" class="qty-circle-btn" type="button">−</button>
                     <b id="counter" class="fs-5 fw-semibold">1</b>
-                    <button class="qty-circle-btn" type="button" id="increment">+</button>
+                    <button id="increment" class="qty-circle-btn" type="button">+</button>
                 </div>
             </div>
             <a href="#" type="button" class="btn btn-primary btn-lg mt-2" id="add-to-cart">Добавить в корзину</a>

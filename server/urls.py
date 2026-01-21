@@ -25,7 +25,8 @@ from shop.views import (
     LoginView, 
     logout_user, 
     ProductDetailView, 
-    CartView
+    CartView,
+    ShowCartView,
 )
 
 urlpatterns = [
@@ -36,7 +37,8 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('cart/', CartView.as_view(), name='cart'),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='product_detail'),
-    path("cart/<int:product_id>/", CartView.as_view(), name="cart")
+    path("cart/<int:product_id>/", CartView.as_view(), name="cart"),
+    path("showcart/", ShowCartView.as_view(), name="showcart"),
 ]
 
 if settings.DEBUG:

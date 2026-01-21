@@ -3,6 +3,7 @@ import json
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpRequest, HttpResponse
+from django.db.models import F, QuerySet, Value
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import ListView, DetailView
@@ -88,6 +89,18 @@ class ProductDetailView(IsAuthenticatedMixin, DetailView):
     template_name = "product_detail.html"
     context_object_name = "product"
 
+    def get_queryset(self):
+        qs: QuerySet[Product] = super().get_queryset()
+        if self.request.discount:
+            discount = 100
+            qs = qs.annotate(discount_price=F("price") - Value(discount))
+        return qs.prefetch_related("productimage_set")
+
+    def get_context_data(self, **kwargs):
+        cd = super().get_context_data(**kwargs)
+        cd["discount"] = self.request.discount
+        return cd
+         
 
 class CartView(View):
 
@@ -141,3 +154,41 @@ class CartView(View):
         del cart[str(product_id)]
         request.session.update({"cart": cart})
         return JsonResponse({},status=204)
+
+
+class ShowCartView(View):
+
+    @staticmethod
+    def get(request: HttpRequest) -> HttpResponse:
+        cart = request.session.get("cart")
+
+        if cart is None:
+            return JsonResponse({ "detail": "Cart does not exist" }, status=404)
+
+        products_ids = cart.keys()
+
+        discount = 100
+
+        products = Product.objects.filter(id__in=products_ids).annotate(
+            discount_price=F("price") - Value(discount)
+        )
+
+        has_discount = getattr(request, "discount", False)
+
+        if has_discount:
+            product_quantity_cart = {
+                product: (cart.get(str(product.id)), cart.get(str(product.id)) * product.discount_price)
+                for product in products
+            }
+        else:
+            product_quantity_cart = {
+                product: (cart.get(str(product.id)), cart.get(str(product.id)) * product.price)
+                for product in products
+            }
+        
+        total_sum = sum(item[1] for item in product_quantity_cart.values())
+        
+        return render(
+            request,
+            "cart.html",
+            context={"cart": product_quantity_cart, "discount": has_discount, "total_sum": total_sum})
